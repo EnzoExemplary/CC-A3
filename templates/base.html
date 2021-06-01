@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="static/styles.css">
+	</head>
+	
+	<body>
+		<section>
+			<nav class="navbar">
+				<a href="{{ url_for('root') }}" class="navbar-item"> Home </a>
+				<a href="https://www.youtube.com/watch?v=SY3y6zNTiLs&list=LL" class="navbar-item"> Huzzah </a>
+				<a href="https://www.youtube.com/watch?v=J8k2DwKnL2o&list=LL" class="navbar-item"> Marshal </a>
+			</nav>
+		</section>
+		
+		<section>
+			<div class = "main">
+				{% block content %}
+				{% endblock %}
+			</div>
+		<section>
+	</body>
+	
+</html>
