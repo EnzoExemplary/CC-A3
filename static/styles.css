@@ -7,14 +7,21 @@ body {
 	font-family: courier;
 	font-size: 160%;
 	padding: 30px 0 0;
+	margin: 0px;
 }
         
 .navbar {
+	border: 1px solid #dedede;
+	border-radius: 4px;
+	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.065);
 	overflow: hidden;
-	background-color: #80ffff;
+	background-color: #e6ffff;
 	position: fixed;
+	margin: 8px 18px 8px 18px;
+	width: calc(100% - 36px);
 	top: 0;
-	width: 100%;
+	white-space: nowrap;
+	padding: 0;
 }
         
 .navbar a {
@@ -24,12 +31,12 @@ body {
 	color: #0d0d0d;
 	font-weight: bold;
 	text-align: center;
-	padding: 14px 10px;
+	padding: 10px 10px;
 	text-decoration: none;
 }
         
 .navbar a:hover {
-	background: #4dffff;
+	background: #e6e6e6;
 	color: black;
 }
     
