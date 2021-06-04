@@ -2,6 +2,27 @@
 
 {% block content %}
 <div class="midtext">		
-	<h2>Login Page</h2> 
+	<h2>Login</h2> 
+	
+		<!--Show flashed messages if any-->
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<p> {{ messages[0] }} </p>
+		{% endif %}
+	{% endwith %}
+	
+	<form action="/login" method="POST">
+		<fieldset>
+			<input type="text" id="username" name="username" placeholder="Username"
+			style="font-size: 18pt; height: 40px; width: 280px"><br><br>
+
+			<input type="text" id="password" name="password" placeholder="Password"
+			style="font-size: 18pt; height: 40px; width: 280px"><br><br>
+			
+			<div> 
+				<input type="submit" value="Submit" style="font-size: 18pt; height: 40px; width: 200px"> 
+			</div>
+		</fieldset>
+	</form>
 </div> 
 {% endblock %}

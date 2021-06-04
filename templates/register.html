@@ -1,7 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="midtext">		
-	<h2>Register Page</h2> 
+
+<div class="midtext">
+	<h2>Register</h2> 
+	
+	<!--Show flashed messages if any-->
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<p> {{ messages[0] }} </p>
+		{% endif %}
+	{% endwith %}
+	
+	<form action="/register" method="POST">
+		<fieldset>
+			<input type="text" id="username" name="username" placeholder="Username" 
+			style="font-size: 18pt; height: 40px; width: 280px" required><br><br>
+			
+			<input type="password" id="password" name="password" placeholder="Password" 
+			style="font-size: 18pt; height: 40px; width: 280px" required><br><br>
+			
+			<input type="password" id="confirm_pass" name="confirm_pass" placeholder="Confirm Password" 
+			style="font-size: 18pt; height: 40px; width: 280px" required><br><br>
+			
+			<input type="email" id="email" name="email" placeholder="Email" 
+			style="font-size: 18pt; height: 40px; width: 280px" required><br><br>
+			
+			<div> 
+				<input type="submit" value="Register" style="font-size: 18pt; height: 40px; width: 200px"> 
+			</div>
+		</fieldset>
+	</form>
 </div> 
+
+<script type="text/javascript" src="static/auth.js">
+	 info("Authorisation javascript loaded");
+</script>	
+
 {% endblock %}
