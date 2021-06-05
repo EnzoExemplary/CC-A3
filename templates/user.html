@@ -2,6 +2,12 @@
 
 {% block content %}
 <div class="midtext">		
-	<h2>User Page</h2> 
+	{% if user == '' %}
+		<h2>404 USER NOT FOUND</h2>
+	{% else %}
+		<h2>{{ user.username }}</h2>
+		
+		<h3>{{ user.profile_bio }}</h3>
+	{% endif %}
 </div> 
 {% endblock %}
