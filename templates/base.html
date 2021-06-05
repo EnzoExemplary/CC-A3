@@ -10,8 +10,15 @@
 			<nav class="navbar">
 				<a href="{{ url_for('root') }}" class="navbar-item"> Home </a>
 				<a href="{{ url_for('search') }}" class="navbar-item"> Search </a>
-				<a href="{{ url_for('auth.register') }}" class="navbar-item" style="float:right;"> Register </a>
-				<a href="{{ url_for('auth.login') }}" class="navbar-item" style="float:right;"> Login </a>
+				
+				{% if user == '' %}
+					<a href="{{ url_for('auth.register') }}" class="navbar-item" style="float:right;"> Register </a>
+					<a href="{{ url_for('auth.login') }}" class="navbar-item" style="float:right;"> Login </a>	
+				{% else %}
+					<a href="{{ url_for('user_page', username=user.username) }}" class="navbar-item" style="float:right;"> {{ user.username }} </a>
+					<a href="{{ url_for('auth.logout') }}" class="navbar-item" style="float:right;"> Logout </a>					
+				{% endif %}
+
 			</nav>
 		</section>
 		

@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint, render_template, session, redirect, url_for, request, flash
+from util import getUsername, getUserByUsername
 import requests
 import json
 
@@ -7,7 +8,8 @@ ENDPOINT_API = "https://iw6n2bfzzd.execute-api.ap-southeast-2.amazonaws.com/prod
 
 @auth.route('/login')
 def login():
-	return render_template('login.html')
+	user = getUserByUsername(getUsername())
+	return render_template('login.html', user=user)
 	
 @auth.route('/login', methods=['POST'])
 def login_post():
@@ -27,15 +29,13 @@ def login_post():
 	else:
 		flash('Username or password is invalid')
 		return redirect(url_for('auth.login'))
-	
-#Check username in session, return empty string if no username
-def getUsername():
-	username = ''
-	if 'username' in session:
-		username = session['username']
 		
-	return username	
+@auth.route('/logout')
+def logout():
+	session.pop('username', None)
 
+	return redirect(url_for('auth.login'))
+	
 @auth.route('/register')
 def register():
 	return render_template('register.html')
