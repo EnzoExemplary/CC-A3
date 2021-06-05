@@ -38,4 +38,5 @@ def logout():
 	
 @auth.route('/register')
 def register():
-	return render_template('register.html')
+	user = getUserByUsername(getUsername())
+	return render_template('register.html', user=user)
