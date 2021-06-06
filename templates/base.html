@@ -15,6 +15,7 @@
 					<a href="{{ url_for('auth.register') }}" class="navbar-item" style="float:right;"> Register </a>
 					<a href="{{ url_for('auth.login') }}" class="navbar-item" style="float:right;"> Login </a>	
 				{% else %}
+					<a href="{{ url_for('add_pet') }}" class="navbar-item"> Add Pet+ </a>
 					<a href="{{ url_for('user_page', username=user.username) }}" class="navbar-item" style="float:right;"> {{ user.username }} </a>
 					<a href="{{ url_for('auth.logout') }}" class="navbar-item" style="float:right;"> Logout </a>					
 				{% endif %}

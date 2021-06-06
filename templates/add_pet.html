@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="midtext">		
+	<h2>Add Your Pet!</h2>
+	
+	<!--Show flashed messages if any-->
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<p style="font-size: 12pt"> {{ messages[0] }} </p>
+		{% endif %}
+	{% endwith %}
+	
+	
+	<form enctype='multipart/form-data' action='/add_pet' method='POST'>
+		<label> Pet Photo: </label>
+		<input type='file' id='img' name='img' accept='.png' required><br><br>
+		
+		<input type="text" id="name" name="name" placeholder="Pet's Name" 
+		style="font-size: 18pt; height: 40px; width: 280px" required><br>
+		
+		
+		<div>
+			<br><input type='submit' value='Add Pet' style='font-size: 18pt; height: 40px; width: 200px'>
+		</div>
+	</form>
+</div> 
+{% endblock %}

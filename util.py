@@ -10,7 +10,6 @@ def getUsername():
 	if 'username' in session:
 		username = session['username']
 		
-	print(username)
 	return username
 	
 def getUserByUsername(username):
