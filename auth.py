@@ -40,3 +40,22 @@ def logout():
 def register():
 	user = getUserByUsername(getUsername())
 	return render_template('register.html', user=user)
+	
+@auth.route('/register', methods=['POST'])
+def register_post():
+	username = request.form.get('username')
+	password = request.form.get('password')
+	email = request.form.get('email')
+	
+	data = {'username': username, 'password': password, 'email': email}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'register'
+	response = requests.post(url, data=json_data)
+	response = json.loads(response.text)
+	
+	if(response['success']):
+		flash('Account successfully registered')
+	else:
+		flash(response['info'])
+		
+	return redirect(url_for('auth.login'))
