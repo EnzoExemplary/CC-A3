@@ -25,3 +25,35 @@ def getUserByUsername(username):
 		user = response['user']
 	
 	return user
+	
+def getPetByPetId(pet_id):
+	pet = ''
+	
+	data = {'id': pet_id}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'pet'
+	response = requests.get(url, data=json_data)
+	response = json.loads(response.text)
+	
+	if 'pet' in response:
+		pet = response['pet']
+		
+	if pet == None:
+		pet = ''
+		
+	return pet
+	
+def getRatingByRatingId(rating_id):
+	rating = 0
+	
+	data = {'id': rating_id}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'rating'
+	response = requests.get(url, data=json_data)
+	response = json.loads(response.text)
+	
+	if 'rating' in response:
+		rating = response['rating']
+	
+	return rating
+	

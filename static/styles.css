@@ -3,7 +3,7 @@
 body {
 	background-color: #b3ffff;
 	text-align: center;
-	color: white;
+	color: #0d0d0d;
 	font-family: 'Trebuchet MS', sans-serif;
 	font-size: 160%;
 	padding: 30px 0 0;
@@ -44,9 +44,61 @@ body {
 	color: #0d0d0d;
 	font-family: 'Trebuchet MS', sans-serif;
 	font-size: 160%;
-	margin: auto;
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
+.pet-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". rating-area heading heading . ."
+    "pet-area pet-area pet-area comment-area comment-area comment-area"
+    "pet-area pet-area pet-area comment-area comment-area comment-area"
+    "pet-area pet-area pet-area comment-area comment-area comment-area";
+}
+.pet-area { grid-area: pet-area; }
+.comment-area { grid-area: comment-area; }
+.rating-area { grid-area: rating-area; }
+.heading { grid-area: heading; }
+
+.pet-img {
+  border-radius: 8px;
+  width: 300px;
+}
+
+.star_rating {
+	float: left;
+    height: 46px;
+    padding: 0 0px;
+}
+.star_rating:not(:checked) > input {
+    position: absolute;
+    top: -100px;
+}
+.star_rating:not(:checked) > label {
+    float: right;
+	width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 62px;
+    color: #ccc;
+}
+
+.star_rating:not(:checked) > label:before { content: '★ '; }
+.star_rating > input:checked ~ label { color: #ffff1a; }
+
+.star_rating:not(:checked) > label:hover,
+.star_rating:not(:checked) > label:hover ~ label { color: #cccc00; }
+
+.star_rating > input:checked + label:hover,
+.star_rating > input:checked + label:hover ~ label,
+.star_rating > input:checked ~ label:hover,
+.star_rating > input:checked ~ label:hover ~ label,
+.star_rating > label:hover ~ input:checked ~ label { color: #b3b300; }
+
