@@ -5,26 +5,30 @@ var radio_buttons = document.getElementsByName('rate');
 
 for(var i = 0, max = radio_buttons.length; i < max; i++) {
 	radio_buttons[i].onclick = function() {
-		
-		var id = pet_id + user;
-		var rating = this.value;
-		
-		var dict = {
-			'id': id,
-			'username': user,
-			'rating': rating,
-			'pet_id': pet_id
-		};
-					
-		fetch(url, {
-            method: "POST",
-            credentials: "include",
-            body: JSON.stringify(dict),
-            cache: "no-cache",
-            headers: new Headers({
-                "content-type": "application/json"
-            })
-        });
+		if(user.length > 0) {
+			var id = pet_id + user;
+			var rating = this.value;
+			
+			var dict = {
+				'id': id,
+				'username': user,
+				'rating': rating,
+				'pet_id': pet_id
+			};
+						
+			fetch(url, {
+				method: "POST",
+				credentials: "include",
+				body: JSON.stringify(dict),
+				cache: "no-cache",
+				headers: new Headers({
+					"content-type": "application/json"
+				})
+			});
+		} else {
+			window.location.replace("/login");
+		}
 	}
 }
-	
+
+

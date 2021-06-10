@@ -15,7 +15,19 @@ ENDPOINT_API = "https://iw6n2bfzzd.execute-api.ap-southeast-2.amazonaws.com/prod
 @application.route('/')
 def root():
 	user = getUserByUsername(getUsername())
-	return render_template('index.html', user=user)	
+	api_url = ENDPOINT_API + 'pet/random'
+	response = requests.get(api_url)
+	response = json.loads(response.text)
+
+	rand_pet = ''
+	if response['pet']:
+		rand_pet = response['pet']
+	
+	rating = 0
+	if user and rand_pet != '':
+		rating = getRatingByRatingId(rand_pet['id'] + user['username'])
+	
+	return render_template('index.html', user=user, pet=rand_pet, rating=rating)	
 	
 @application.route('/search')
 def search():

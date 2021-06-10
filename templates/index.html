@@ -1,7 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="midtext">		
-	<h2>Home Page :)</h2> 
-</div> 
+
+{% if pet == '' %}
+	<br><h2>404 PET NOT FOUND</h2>
+{% else %}
+	<input type="hidden" id="update_rating_url" value="{{ url_for('update_rating') }}">
+	<input type="hidden" id="pet_id" value="{{ pet.id }}">
+	<input type="hidden" id="user" value="{{ user.username }}">
+
+	<div class="index-pet-grid-container">
+		<div class="index-header">
+			<br><h2 style="font-size: 40pt">{{ pet.name }}</h2>
+		</div>
+	
+		<div class="index-rating star_rating">
+			<input type="radio" id="star5" name="rate" value="5" />
+			<label for="star5" title="text">5 stars</label>
+			<input type="radio" id="star4" name="rate" value="4" />
+			<label for="star4" title="text">4 stars</label>
+			<input type="radio" id="star3" name="rate" value="3" />
+			<label for="star3" title="text">3 stars</label>
+			<input type="radio" id="star2" name="rate" value="2" />
+			<label for="star2" title="text">2 stars</label>
+			<input type="radio" id="star1" name="rate" value="1" />
+			<label for="star1" title="text">1 star</label>
+		</div>
+		
+		<div class="index-pet-area">	
+			<a href="{{ url_for('pet_page', pet_id=pet.id) }}"> 
+				<img class="pet-img" src="{{ pet.img_url}}" alt="{{ pet.name }}">
+			</a>
+			<br>Owner: <a href="{{ url_for('user_page', username=pet.owner) }}"> {{ pet.owner }} </a>
+		</div>			
+	</div>
+	
+{% endif %}
+	<script>
+		var rating = {{ rating }}
+		if (rating == 1) {
+			document.getElementById('star1').checked = true;
+		} else if (rating == 2) {
+			document.getElementById('star2').checked = true;
+		} else if (rating == 3) {
+			document.getElementById('star3').checked = true;
+		} else if (rating == 4) {
+			document.getElementById('star4').checked = true;
+		} else if (rating == 5) {
+			document.getElementById('star5').checked = true;
+		}
+	</script>
+
+	<script type="text/javascript" src="/static/rating.js">
+		info("Star rating javascript loaded");
+	</script>	
 {% endblock %}
