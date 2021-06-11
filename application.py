@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, render_template, session, request, flash, url_for, redirect
 from auth import auth
-from util import getUsername, getUserByUsername, getPetByPetId, getRatingByRatingId, getCommentsByPetId, getAverageRatingByPetId
+from util import getUsername, getUserByUsername, getPetByPetId, getRatingByRatingId, getCommentsByPetId, getAverageRatingByPetId, getSearchResults
 import requests
 import json
 import base64
@@ -33,7 +33,15 @@ def root():
 @application.route('/search')
 def search():
 	user = getUserByUsername(getUsername())
-	return render_template('search.html', user=user)
+	return render_template('search.html', user=user, pets=[])
+	
+@application.route('/search', methods=['POST'])
+def search_post():
+	search = request.form.get('search')
+	user = getUserByUsername(getUsername())
+	pets = getSearchResults(search)
+	
+	return render_template('search.html', user=user, pets=pets)
 	
 @application.route('/user/<username>')
 def user_page(username):

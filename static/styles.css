@@ -87,6 +87,20 @@ body {
 .rating-area { grid-area: rating-area; }
 .heading { grid-area: heading; }
 
+.search-grid-container {
+  display: grid; 
+  grid-auto-columns: 1fr; 
+  grid-template-columns: 1fr 1fr; 
+  grid-template-rows: 0.25fr 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "search-header search-header"
+    "search-results search-results"; 
+}
+.search-header { grid-area: search-header; }
+.search-results { grid-area: search-results; }
+
+
 .pet-img {
   border-radius: 8px;
   width: 300px;

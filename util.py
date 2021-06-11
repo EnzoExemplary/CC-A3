@@ -85,7 +85,19 @@ def getAverageRatingByPetId(pet_id):
 		
 	return average
 	
+def getSearchResults(search):
+	results = []
 	
+	data = {'search': search}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'search'
+	response = requests.get(url, data=json_data)
+	response = json.loads(response.text)
+	
+	if 'pets' in response:
+		results = response['pets']
+		
+	return results
 	
 	
 	
