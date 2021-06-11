@@ -70,6 +70,20 @@ def getCommentsByPetId(pet_id):
 		comments = response['comments']
 		
 	return comments
+
+def getAverageRatingByPetId(pet_id):
+	average = 0
+	
+	data = {'pet_id': pet_id}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'pet/average-rating'
+	response = requests.get(url, data=json_data)
+	response = json.loads(response.text)
+	
+	if 'average_rating' in response:
+		average = response['average_rating']
+		
+	return average
 	
 	
 	

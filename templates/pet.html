@@ -11,7 +11,7 @@
 
 	<div class="pet-grid-container">
 		<div class="heading area">
-			<br><h2 style="font-size: 40pt">{{ pet.name }}</h2>
+			<br><h2 style="font-size: 40pt">{{ pet.name }} - ({{ average_rating }})</h2>
 		</div>
 	
 		<div class="rating-area star_rating">
@@ -47,7 +47,7 @@
 						
 					</p>
 					<p style="font-size:50%; line-height:1%">
-						<i>User: <a href="{{ url_for('user_page', username=user.username) }}">{{ user.username }}</a></i>
+						<i>User: <a href="{{ url_for('user_page', username=comment.username) }}">{{ comment.username }}</a></i>
 					</p>
 					<br>
 				{% endfor %}

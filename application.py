@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, render_template, session, request, flash, url_for, redirect
 from auth import auth
-from util import getUsername, getUserByUsername, getPetByPetId, getRatingByRatingId, getCommentsByPetId
+from util import getUsername, getUserByUsername, getPetByPetId, getRatingByRatingId, getCommentsByPetId, getAverageRatingByPetId
 import requests
 import json
 import base64
@@ -17,16 +17,18 @@ def root():
 	api_url = ENDPOINT_API + 'pet/random'
 	response = requests.get(api_url)
 	response = json.loads(response.text)
+	average_rating = 0
 
 	rand_pet = ''
 	if response['pet']:
 		rand_pet = response['pet']
+		average_rating = getAverageRatingByPetId(rand_pet['id'])
 	
 	rating = 0
 	if user and rand_pet != '':
 		rating = getRatingByRatingId(rand_pet['id'] + user['username'])
 	
-	return render_template('index.html', user=user, pet=rand_pet, rating=rating)	
+	return render_template('index.html', user=user, pet=rand_pet, rating=rating, average_rating=average_rating)	
 	
 @application.route('/search')
 def search():
@@ -44,8 +46,9 @@ def pet_page(pet_id):
 	pet = getPetByPetId(pet_id) 
 	rating = getRatingByRatingId(pet_id + username)
 	comments = getCommentsByPetId(pet_id)
+	average_rating = getAverageRatingByPetId(pet_id)
 	
-	return render_template('pet.html', user = user, pet = pet, rating = rating, comments = comments)
+	return render_template('pet.html', user = user, pet = pet, rating = rating, comments = comments, average_rating = average_rating)
 
 @application.route('/add_pet')
 def add_pet():
