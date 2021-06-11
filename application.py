@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, render_template, session, request, flash, url_for, redirect
 from auth import auth
-from util import getUsername, getUserByUsername, getPetByPetId, getRatingByRatingId, getCommentsByPetId, getAverageRatingByPetId, getSearchResults
+from util import *
 import requests
 import json
 import base64
@@ -45,7 +45,42 @@ def search_post():
 	
 @application.route('/user/<username>')
 def user_page(username):
-	return render_template('user.html', user=getUserByUsername(username))
+	user = getUserByUsername(getUsername())
+	return render_template('user.html', user=user, page_user=getUserByUsername(username))
+	
+@application.route('/user/<username>/pets')
+def user_pets(username):
+	user = getUserByUsername(getUsername())
+	pets = getPetsByOwner(username)
+	return render_template('user_pets.html', user=user, page_user=getUserByUsername(username), pets=pets)
+	
+@application.route('/user/<username>/ratings')
+def user_ratings(username):
+	user = getUserByUsername(getUsername())
+	pets = getPetsRatedByUser(username)
+	return render_template('user_ratings.html', user=user, page_user=getUserByUsername(username), pets=pets)
+	
+@application.route('/edit-bio')
+def edit_bio():
+	username = getUsername()
+	user = getUserByUsername(username)
+	
+	if username == '':
+		return redirect(url_for('auth.login'))
+	else:
+		return render_template('update_bio.html', user=user)
+		
+@application.route('/edit-bio', methods=['POST'])
+def edit_bio_post():
+	new_bio = request.form['bio-box']
+	username = getUsername()
+	
+	data = {'username': username, 'new_bio': new_bio}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'user/bio'
+	requests.post(url, data=json_data)
+	
+	return redirect(url_for('user_page', username=username))
 	
 @application.route('/pet/<pet_id>')
 def pet_page(pet_id):

@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="midtext">		
-	<h2>User Ratings</h2> 
-</div> 
+<div class="search-grid-container">
+	<div class="search-header"> 
+		<h2 style="font-size: 45pt"> {{ page_user.username }}'s Ratings </h2>
+	</div>
+		
+	<div class="search-results" style="overflow-y: scroll; height: 700px">
+		{% for pet in pets %}
+			<a href="{{ url_for('pet_page', pet_id=pet.pet_id) }}"><img class="pet-img" style="width: 80px"src="{{ pet.img_url}}" alt="{{ pet.name }}"></a>
+			<p style="font-size:80%; line-height:1%">Rated <i>{{ pet.rating }}</i></p>
+		{% endfor %}
+	</div>
 {% endblock %}

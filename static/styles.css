@@ -100,6 +100,24 @@ body {
 .search-header { grid-area: search-header; }
 .search-results { grid-area: search-results; }
 
+.user-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.5fr 1fr 1fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "user-header user-header user-header user-header"
+    "user-bio-area user-bio-area user-pets-area user-pets-area"
+    "user-bio-area user-bio-area user-pets-area user-pets-area"
+    "user-bio-area user-bio-area user-pets-area user-pets-area";
+}
+
+.user-header { grid-area: user-header; }
+.user-bio-area { grid-area: user-bio-area; }
+.user-pets-area { grid-area: user-pets-area; }
+
 
 .pet-img {
   border-radius: 8px;

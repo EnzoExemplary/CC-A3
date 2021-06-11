@@ -98,11 +98,34 @@ def getSearchResults(search):
 		results = response['pets']
 		
 	return results
+
+def getPetsByOwner(username):
+	results = []
 	
+	data = {'username': username}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'user/pets'
+	response = requests.get(url, data=json_data)
+	response = json.loads(response.text)
 	
+	if 'pets' in response:
+		results = response['pets']
+		
+	return results
 	
+def getPetsRatedByUser(username):
+	results = []
 	
+	data = {'username': username}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'user/rated'
+	response = requests.get(url, data=json_data)
+	response = json.loads(response.text)
 	
+	if 'rated_pets' in response:
+		results = response['rated_pets']
+		
+	return results
 	
 	
 	

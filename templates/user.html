@@ -1,13 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="midtext">		
-	{% if user == '' %}
-		<h2>404 USER NOT FOUND</h2>
-	{% else %}
-		<h2>{{ user.username }}'s Profile</h2>
+	
+{% if page_user == '' %}
+	<h2>404 USER NOT FOUND</h2>
+{% else %}
+	<div class="user-grid-container">
+		<div class="user-header">
+			<br><h2>{{ page_user.username }}'s Profile</h2>
+			
+			{% if user.username == page_user.username %}
+				<a href="{{ url_for('edit_bio') }}" style="font-size: 15pt">edit bio</a>
+			{% endif %}
+		</div>
 		
-		<h3>{{ user.profile_bio }}</h3>
-	{% endif %}
-</div> 
+		<div class="user-bio-area">
+			<p> {{ page_user.profile_bio }} </p>
+		</div>
+		
+		<div class="user-pets-area">
+			<br><br>
+			<a href="{{ url_for('user_pets', username=page_user.username) }}"> {{ page_user.username }}'s Pets </a>
+			<br><br><br><br><br><br>
+			<a href="{{ url_for('user_ratings', username=page_user.username) }}"> {{ page_user.username }}'s Ratings </a>
+		</div>
+	</div>
+
+{% endif %}
+
 {% endblock %}
