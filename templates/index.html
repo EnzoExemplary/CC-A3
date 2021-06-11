@@ -32,6 +32,9 @@
 				<img class="pet-img" src="{{ pet.img_url}}" alt="{{ pet.name }}">
 			</a>
 			<br>Owner: <a href="{{ url_for('user_page', username=pet.owner) }}"> {{ pet.owner }} </a>
+			<p style="font-size:70%; line-height:1%"> 
+				<a href="{{ url_for('comment', pet_id = pet.id) }}"> Leave a comment...</a>
+			</p>
 		</div>			
 	</div>
 	
