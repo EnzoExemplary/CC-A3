@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, render_template, session, request, flash, url_for, redirect
 from auth import auth
-from util import getUsername, getUserByUsername, getPetByPetId, getRatingByRatingId
+from util import getUsername, getUserByUsername, getPetByPetId, getRatingByRatingId, getCommentsByPetId
 import requests
 import json
 import base64
@@ -43,8 +43,9 @@ def pet_page(pet_id):
 	user = getUserByUsername(username)
 	pet = getPetByPetId(pet_id) 
 	rating = getRatingByRatingId(pet_id + username)
+	comments = getCommentsByPetId(pet_id)
 	
-	return render_template('pet.html', user = user, pet = pet, rating = rating)
+	return render_template('pet.html', user = user, pet = pet, rating = rating, comments = comments)
 
 @application.route('/add_pet')
 def add_pet():

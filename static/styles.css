@@ -50,6 +50,11 @@ body {
 	transform: translate(-50%, -50%);
 }
 
+.comments { 
+	overflow-y: scroll;
+	height: 500px;
+}
+
 .index-pet-grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr 0.4fr 0.4fr 1fr 1fr;

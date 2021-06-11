@@ -57,3 +57,26 @@ def getRatingByRatingId(rating_id):
 	
 	return rating
 	
+def getCommentsByPetId(pet_id):
+	comments = {}
+	
+	data = {'pet_id': pet_id}
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'pet/comment'
+	response = requests.get(url, data=json_data)
+	response = json.loads(response.text)
+	
+	if 'comments' in response:
+		comments = response['comments']
+		
+	return comments
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

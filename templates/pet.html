@@ -32,14 +32,26 @@
 			<br><br><br>
 			<img class="pet-img" src={{ pet.img_url}} alt={{ pet.name }}>
 			<br><br>Owner: <a href="{{ url_for('user_page', username=pet.owner) }}"> {{ pet.owner }} </a>
+			<p style="font-size:70%; line-height:1%"> 
+				<a href="{{ url_for('comment', pet_id = pet.id) }}"> Leave a comment...</a>
+			</p>
 		</div>			
 			
 		<div class="comment-area">
 			<h2> Comment Section </h2>
-			<p style="font-size: 12pt"> some comments </p>
-			<p style="font-size: 12pt"> some comments </p>
-			<p style="font-size: 12pt"> some comments </p>
-			<p style="font-size: 12pt"> some comments </p>
+
+			<div class="comments">
+				{% for comment in comments %}
+					<p style="font-size:70%; line-height:1%">
+						{{ comment.text }}
+						
+					</p>
+					<p style="font-size:50%; line-height:1%">
+						<i>User: <a href="{{ url_for('user_page', username=user.username) }}">{{ user.username }}</a></i>
+					</p>
+					<br>
+				{% endfor %}
+			</div>
 		</div>
 	</div>
 	
