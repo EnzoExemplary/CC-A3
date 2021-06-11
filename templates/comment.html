@@ -2,6 +2,14 @@
 
 {% block content %}
 <div class="midtext">		
-	<h2>Comment Page</h2> 
+	<h2>Comment on {{ pet.name }}</h2>
+	
+	<form action="/pet/{{ pet.id }}/comment" method="POST">
+		<textarea style="reisze:none" name="comment-box" rows="4" cols="50" maxlength="50" placeholder="Enter text here..."></textarea>
+		
+		<div> 
+			<br><input type="submit" value="Submit" style="font-size: 18pt; height: 40px; width: 200px"> 
+		</div>
+	</form>
 </div> 
 {% endblock %}

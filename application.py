@@ -6,7 +6,6 @@ import json
 import base64
 from base64 import b64encode
 
-
 application = Flask(__name__)
 application.config['SECRET_KEY'] = "\x07/\xc2\xbc\xfd\xb9\xb3<\x1f\xd40\xef3\x92\x01\xeb&\xbd\x8f\xe8r\xc3\xb6"
 application.register_blueprint(auth)
@@ -79,6 +78,35 @@ def add_pet_post():
 		flash('Upload failed...')
 		
 	return redirect(url_for('add_pet'))
+	
+@application.route('/pet/<pet_id>/comment')
+def comment(pet_id):
+	username = getUsername()
+	
+	if username == '':
+		return redirect(url_for('auth.login'))
+	else:
+		user = getUserByUsername(username)
+		pet = getPetByPetId(pet_id)
+		return render_template('comment.html', user = user, pet = pet)
+		
+@application.route('/pet/<pet_id>/comment', methods=['POST'])
+def comment_post(pet_id):
+	comment = request.form['comment-box']
+	username = getUsername()
+	
+	data = {
+		'pet_id': pet_id,
+		'text': comment,
+		'username': username
+	}
+	
+	json_data = json.dumps(data)
+	url = ENDPOINT_API + 'pet/comment'
+	requests.post(url, data=json_data)
+	
+	return redirect(url_for('pet_page', pet_id = pet_id))
+	
 	
 @application.route('/update_rating', methods=['POST'])
 def update_rating():
