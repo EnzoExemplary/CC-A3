@@ -59,6 +59,7 @@ def getPet(pet_id):
     if 'pet' in json_data:
         json_data = json_data['pet']
         json_data['average'] = getAverageRatingByPetId(pet_id)
+        json_data['comments'] = getPetComments(pet_id)
 
     return json_data
 
@@ -71,6 +72,7 @@ def getRandomPet():
     if 'pet' in json_data:
         json_data = json_data['pet']
         json_data['average'] = getAverageRatingByPetId(json_data['id'])
+        json_data['comments'] = getPetComments(json_data['id'])
 
     return json_data
 
@@ -95,7 +97,7 @@ def user():
     if username == '':
         return 'No username provided', 400
 
-    return getUser(username)
+    return getUser(username), 200
 
 
 @api.route('/api/user/load', methods=['POST'])
@@ -107,7 +109,7 @@ def user_load():
     if username == '':
         return 'Not logged in.', 403
 
-    return getUser(username)
+    return getUser(username), 200
 
 
 @api.route('/api/user/login', methods=['POST'])
@@ -123,7 +125,7 @@ def user_login():
         user['logintoken'] = token
         return user
 
-    return 'Username or password is invalid'
+    return 'Username or password is invalid', 409
 
 
 @api.route('/api/user/register', methods=['POST'])
@@ -144,7 +146,7 @@ def user_register():
 
 @api.route('/api/user/logout', methods=['POST'])
 def user_logout():
-    return "Logged out."
+    return "Logged out.", 200
 
 
 @api.route('/api/user/update/bio', methods=['POST'])
@@ -190,7 +192,7 @@ def user_update_email():
 @api.route('/api/user/pets', methods=['POST'])
 def user_pets():
     username = request.json['username']
-    return getUserPets(username)
+    return getUserPets(username), 200
 
 
 @api.route('/api/user/pets/rate', methods=['POST'])
@@ -259,12 +261,12 @@ def pet():
     if pet_id == '':
         return 'No pet provided', 400
 
-    return getPet(pet_id)
+    return getPet(pet_id), 200
 
 
 @api.route('/api/pet/random', methods=['GET'])
 def pet_random():
-    return getRandomPet()
+    return getRandomPet(), 200
 
 
 @api.route('/api/pet/search', methods=['POST'])
@@ -279,7 +281,7 @@ def pet_search():
     if 'pets' in json_data:
         json_data = json_data['pets']
 
-    return json_data
+    return json_data, 200
 
 
 @api.route('/api/pet/comments', methods=['GET'])
@@ -288,7 +290,7 @@ def pet_comments():
     if pet_id == '':
         return 'No pet provided', 400
 
-    return getPetComments(pet_id)
+    return getPetComments(pet_id), 200
 
 
 @api.route('/api/pet/comment', methods=['POST'])
