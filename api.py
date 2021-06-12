@@ -54,14 +54,20 @@ def getPet(pet_id):
     })
     url = ENDPOINT_API + 'pet'
     response = requests.get(url, data=json_data)
+
     json_data = json.loads(response.text)
 
-    if 'pet' in json_data:
-        json_data = json_data['pet']
-        json_data['average'] = getAverageRatingByPetId(pet_id)
-        json_data['comments'] = getPetComments(pet_id)
+    data = {}
 
-    return json_data
+    if 'pet' in json_data:
+        data['id'] = json_data['pet']['id']
+        data['name'] = json_data['pet']['name']
+        data['owner'] = json_data['pet']['owner']
+        data['image'] = json_data['pet']['img_url']
+        data['average'] = getAverageRatingByPetId(data['id'])
+        data['comments'] = getPetComments(data['id'])['comments']
+
+    return data
 
 
 def getRandomPet():
@@ -69,12 +75,17 @@ def getRandomPet():
     response = requests.get(url)
     json_data = json.loads(response.text)
 
-    if 'pet' in json_data:
-        json_data = json_data['pet']
-        json_data['average'] = getAverageRatingByPetId(json_data['id'])
-        json_data['comments'] = getPetComments(json_data['id'])
+    data = {}
 
-    return json_data
+    if 'pet' in json_data:
+        data['id'] = json_data['pet']['id']
+        data['name'] = json_data['pet']['name']
+        data['owner'] = json_data['pet']['owner']
+        data['image'] = json_data['pet']['img_url']
+        data['average'] = getAverageRatingByPetId(data['id'])
+        data['comments'] = getPetComments(data['id'])['comments']
+
+    return data
 
 
 def getPetComments(pet_id):
@@ -84,9 +95,6 @@ def getPetComments(pet_id):
     url = ENDPOINT_API + 'pet/comment'
     response = requests.get(url, data=json_data)
     json_data = json.loads(response.text)
-
-    if 'comments' in json_data:
-        json_data = json_data['comments']
 
     return json_data
 
@@ -278,10 +286,19 @@ def pet_search():
     response = requests.get(url, data=json_data)
     json_data = json.loads(response.text)
 
-    if 'pets' in json_data:
-        json_data = json_data['pets']
+    page = request.json['page']
 
-    return json_data, 200
+    data = {'pets': [], 'numPages': 0}
+    if 'pets' in json_data:
+        data['numPages'] = len(json_data['pets']) / 20
+        for n in range(20):
+            i = n + (page * 20)
+            if i < data['numPages']:
+                id = json_data['pets'][i]['id']
+                pet = getPet(id)
+                data['pets'].append(pet)
+
+    return data, 200
 
 
 @api.route('/api/pet/comments', methods=['GET'])
