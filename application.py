@@ -1,5 +1,7 @@
 from flask import Flask, Blueprint, render_template, session, request, flash, url_for, redirect
+from flask_cors import CORS
 from auth import auth
+from api import api
 from util import *
 import requests
 import json
@@ -7,8 +9,10 @@ import base64
 from base64 import b64encode
 
 application = Flask(__name__)
+cors = CORS(application)
 application.config['SECRET_KEY'] = "\x07/\xc2\xbc\xfd\xb9\xb3<\x1f\xd40\xef3\x92\x01\xeb&\xbd\x8f\xe8r\xc3\xb6"
 application.register_blueprint(auth)
+application.register_blueprint(api)
 ENDPOINT_API = "https://iw6n2bfzzd.execute-api.ap-southeast-2.amazonaws.com/prod/"
 
 @application.route('/')
