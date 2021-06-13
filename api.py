@@ -30,45 +30,59 @@ def getUser(username):
 
 
 def getUserPets(username):
-    json_data = json.dumps({'username': username})
     url = ENDPOINT_API + 'user/pets'
-    response = requests.get(url, data=json_data)
+    response = requests.get(url, json={'username': username})
     json_data = json.loads(response.text)
+
+    data = {'pets': []}
     if 'pets' in json_data:
-        json_data = json_data['pets']
-    return json_data
+        for pet in json_data['pets']:
+            data['pets'].append(convertPet(pet))
+
+    return data
 
 
 def getRatedUserPets(username):
-    json_data = json.dumps({'username': username})
     url = ENDPOINT_API + 'user/rated'
-    response = requests.get(url, data=json_data)
+    response = requests.get(url, json={'username': username})
     json_data = json.loads(response.text)
+
+    data = {'pets': []}
     if 'rated_pets' in json_data:
-        json_data = json_data['rated_pets']
-    return json_data
+        for pet in json_data['rated_pets']:
+            data['pets'].append(convertPet(pet))
+
+    return data
+
+
+def convertPet(json_data):
+    if 'id' not in json_data:
+        if 'pet_id' not in json_data:
+            return {}
+        json_data['id'] = json_data['pet_id']
+
+    data = {
+        'id': json_data['id'],
+        'name': json_data['name'],
+        'owner': json_data['owner'],
+        'image': json_data['img_url'],
+        'average': getAverageRatingByPetId(json_data['id']),
+        'comments': getPetComments(json_data['id'])['comments']
+    }
+
+    return data
 
 
 def getPet(pet_id):
-    json_data = json.dumps({
+    url = ENDPOINT_API + 'pet'
+    response = requests.get(url, json={
         'id': pet_id
     })
-    url = ENDPOINT_API + 'pet'
-    response = requests.get(url, data=json_data)
-
     json_data = json.loads(response.text)
 
-    data = {}
-
     if 'pet' in json_data:
-        data['id'] = json_data['pet']['id']
-        data['name'] = json_data['pet']['name']
-        data['owner'] = json_data['pet']['owner']
-        data['image'] = json_data['pet']['img_url']
-        data['average'] = getAverageRatingByPetId(data['id'])
-        data['comments'] = getPetComments(data['id'])['comments']
-
-    return data
+        return convertPet(json_data['pet'])
+    return {}
 
 
 def getRandomPet():
@@ -76,17 +90,9 @@ def getRandomPet():
     response = requests.get(url)
     json_data = json.loads(response.text)
 
-    data = {}
-
     if 'pet' in json_data:
-        data['id'] = json_data['pet']['id']
-        data['name'] = json_data['pet']['name']
-        data['owner'] = json_data['pet']['owner']
-        data['image'] = json_data['pet']['img_url']
-        data['average'] = getAverageRatingByPetId(data['id'])
-        data['comments'] = getPetComments(data['id'])['comments']
-
-    return data
+        return convertPet(json_data['pet'])
+    return {}
 
 
 def getPetComments(pet_id):
@@ -198,10 +204,14 @@ def user_update_email():
     return 'Success', 200
 
 
-@api.route('/api/user/pets', methods=['POST'])
+@api.route('/api/user/pets', methods=['GET'])
 def user_pets():
-    username = request.json['username']
-    return getUserPets(username), 200
+    username = request.args.get('username', '')
+    if username == '':
+        return 'No username provided', 400
+
+    data = getUserPets(username)
+    return data, 200
 
 
 @api.route('/api/user/pets/rate', methods=['POST'])
@@ -229,10 +239,14 @@ def user_pets_rate():
     return 'Failed to rate pet', 400
 
 
-@api.route('/api/user/pets/rated', methods=['POST'])
+@api.route('/api/user/pets/rated', methods=['GET'])
 def user_pets_rated():
-    username = request.json['username']
-    return getRatedUserPets(username)
+    username = request.args.get('username', '')
+    if username == '':
+        return 'No username provided', 400
+
+    data = getRatedUserPets(username)
+    return data, 200
 
 
 @api.route('/api/pet/add', methods=['POST'])
@@ -303,8 +317,7 @@ def pet_search():
         for n in range(20):
             i = n + (page * 20)
             if i < results:
-                id = json_data['pets'][i]['id']
-                pet = getPet(id)
+                pet = convertPet(json_data['pets'][i])
                 data['pets'].append(pet)
 
     return data, 200
