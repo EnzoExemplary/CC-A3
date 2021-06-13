@@ -4,7 +4,8 @@ from util import getAverageRatingByPetId
 import requests
 import json
 import base64
-from base64 import b64encode
+import re
+import math
 
 api = Blueprint('api', __name__, template_folder='templates')
 ENDPOINT_API = "https://iw6n2bfzzd.execute-api.ap-southeast-2.amazonaws.com/prod/"
@@ -25,7 +26,7 @@ def getUser(username):
     response = requests.get(url, data=json_data)
     json_data = json.loads(response.text)
 
-    return json_data
+    return json_data['user']
 
 
 def getUserPets(username):
@@ -245,16 +246,22 @@ def pet_add():
 
     user = getUser(username)
 
-    json_data = json.dumps({
+    image = request.json['image']
+
+    image = re.sub('^data:image/.+;base64,', '', image)
+
+    json_data = {
         'pet_name': request.json['name'],
         'folder_name': 'pet_images',
-        'image': request.json['image'],
+        'image': image,
         'username': username,
-        'num_pets': user['num_pets']
-    })
+        'num_pets': user['num_pets'],
+    }
+
+    json_data = json.dumps(json_data)
 
     url = ENDPOINT_API + 'add-pet'
-    response = requests.post(url, json=json_data)
+    response = requests.post(url, data=json_data)
     json_data = json.loads(response.text)
 
     if json_data['success']:
@@ -290,10 +297,12 @@ def pet_search():
 
     data = {'pets': [], 'numPages': 0}
     if 'pets' in json_data:
-        data['numPages'] = len(json_data['pets']) / 20
+        results = len(json_data['pets'])
+        pages = math.ceil(len(json_data['pets']) / 20)
+        data['numPages'] = pages
         for n in range(20):
             i = n + (page * 20)
-            if i < data['numPages']:
+            if i < results:
                 id = json_data['pets'][i]['id']
                 pet = getPet(id)
                 data['pets'].append(pet)
@@ -307,7 +316,10 @@ def pet_comments():
     if pet_id == '':
         return 'No pet provided', 400
 
-    return getPetComments(pet_id), 200
+    json_data = getPetComments(pet_id)
+    json_data['pet_id'] = pet_id
+
+    return json_data, 200
 
 
 @api.route('/api/pet/comment', methods=['POST'])
@@ -326,7 +338,7 @@ def pet_comment():
     })
 
     url = ENDPOINT_API + 'pet/comment'
-    response = requests.post(url, json=json_data)
+    response = requests.post(url, data=json_data)
     json_data = json.loads(response.text)
 
     return 'Success', 200
